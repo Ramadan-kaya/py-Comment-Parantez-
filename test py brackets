@@ -1,0 +1,303 @@
+        string skobaStart = "#{";
+        string skobaStop = "#}";
+        string isActive = "#@{";
+        string isNeutral = "#@}";
+        bool pas = false;
+        string hata = "hata";
+        string test(string[] s)
+        {
+            string str0 = "";
+            string lin = "";
+            string space = "";
+            string liste = ""; 
+            string ara = "";
+            int aru = 0;
+            int i = 0;
+            int ay = 0;
+
+            foreach (var item in s)
+            {
+                ay++;
+                if (item.IndexOf(isActive) != -1)
+                    pas = true;
+                if (item.IndexOf(isNeutral) != -1)
+                    pas = false;
+
+                lin = item;
+                if (!pas)
+                {
+                    lin = lin.TrimStart().TrimEnd();
+                    if (lin.Length > 0)
+                    {
+                        string spax = space;
+                        int a = lin.IndexOf(skobaStart), b = lin.IndexOf(skobaStop);
+                        if (a != -1 && b != -1)
+                        {
+                            //başta
+                            if (a == 0)//skobaStart
+                            {
+                                spax = space += " ";
+                                Console.WriteLine(ay + " başta str " + str0 + "  aru " + aru + "  skobaStart  hedef bulundu");
+                            }
+                            else if (b == 0)//skobaStop 
+                            {
+                                if (space.Length == 0)
+                                {
+                                    MessageBox.Show(hata + "  " + ay);
+                                    return liste;
+                                }
+                                spax = space = space.Substring(1);
+                                Console.WriteLine(ay + " başta str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                            }
+                            //sonunda 
+                            else if (a == (lin.Length - skobaStart.Length))
+                            {
+                                spax += " ";
+                                Console.WriteLine(ay + " sonunda  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                            }
+                            else if (b == (lin.Length - skobaStop.Length))
+                            {
+                                Console.WriteLine(ay + " stop  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                if (spax.Length == 0)
+                                {
+                                    MessageBox.Show(hata + "  " + ay);
+                                    return liste;
+                                }
+                                spax = spax.Substring(1);
+                            }
+
+                            else//   icerde  bulmak
+                            {
+                                ara = skobaStop;
+                                aru = b;
+                                bool c1 = Commentcontents();
+                                int c = i;
+                                i = 0;
+                                ara = skobaStart;
+                                aru = a;
+                                bool d2 = Commentcontents();
+
+                                if (d2 && i != -1 && c != -1 && i < c)//skobaStart; 
+                                {
+                                    spax += " ";
+
+                                }
+
+                                if (c1 && c != -1 && i != -1 && i > c)
+                                {
+                                    Console.WriteLine(ay + " stop  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                    if (spax.Length == 0)
+                                    {
+                                        MessageBox.Show(hata + "  " + ay);
+                                        return liste;
+                                    }
+                                    Console.WriteLine(ay + " stop   hedef bulundu if (a != -1 && b != -1) ");
+                                    //  MessageBox.Show("   if (a != -1 && b != -1) ");
+                                    spax = spax.Substring(1);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (b != -1)
+                            {
+                                if (b == 0)//skobaStop 
+                                {
+                                    if (space.Length == 0)
+                                    {
+                                        MessageBox.Show(hata + "  " + ay);
+                                        return liste;
+                                    }
+                                    spax = space = space.Substring(1);
+                                    Console.WriteLine(ay + " başta str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                }
+
+                                else if (b == (lin.Length - skobaStop.Length))
+                                {
+                                    Console.WriteLine(ay + " stop  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                    if (spax.Length == 0)
+                                    {
+                                        MessageBox.Show(hata + "  " + ay);
+                                        return liste;
+                                    }
+                                    spax = spax.Substring(1);
+                                }
+                                else
+                                {
+                                    Console.WriteLine(ay + " stop  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                    ara = skobaStop;
+                                    aru = b;
+                                    if ((Commentcontents()))
+                                    {
+                                        if (spax.Length == 0)
+                                        {
+                                            MessageBox.Show(hata + "  " + ay);
+                                            return liste;
+                                        }
+                                        spax = spax.Substring(1);
+                                    }
+                                }
+                            }
+                            else if (a != -1)
+                            {
+                                if (a == 0)
+                                {
+                                    spax = space += " ";
+                                    Console.WriteLine(ay + " başta str " + str0 + "  aru " + aru + "  skobaStart  hedef bulundu");
+                                }
+                                else if (a == (lin.Length - skobaStart.Length))
+                                {
+                                    spax += " ";
+                                    Console.WriteLine(ay + " sonunda  str " + str0 + "  aru " + aru + " skobaStop  hedef bulundu");
+                                }
+                                else
+                                {
+                                    ara = skobaStart;
+                                    aru = a;
+                                    if (Commentcontents())
+                                    {
+                                        spax += " ";
+                                        //   Console.WriteLine(ay + " str " + str + "  aru " + aru + "  skobaStart  hedef bulundu");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(ay + " Else ");
+                            }
+                        }
+                        liste += ay + "\t" + space + lin + "\n";
+                        space = spax;
+                        //   başında yada  ((En sonunda) x2 )  bulunan ilk işaret    x2 nedir? kimse bilmiyor belki ama zaten önemli değil 
+                    }
+                    else
+                        Console.WriteLine(ay + " Else ");
+                }
+                else
+                    liste += lin + "\n";
+            }
+            return liste;
+
+
+            //If it's not in the " ' text ' ", use the one inside.
+            bool Commentcontents()
+            {
+                i = 0;
+                string str1 = "\"";
+                string str2 = "\'";
+                int str1i = lin.IndexOf(str1, i);
+                int str2i = lin.IndexOf(str2, i);
+                bool cifteteli = false;
+                if (str1i != -1 || str2i != -1)
+                {
+                    void aa()
+                    {
+                        str1i = lin.IndexOf(str1, i);
+                        str2i = lin.IndexOf(str2, i);
+                    }
+
+                    bool tt()
+                    {
+
+                        if (str2i != -1 && str1i == -1 || str2i != -1 && str1i > str2i)
+                        {
+                            i = str2i;
+                            str0 = str2;
+                        }
+                        else if (str1i != -1)
+                        {
+                            i = str1i;
+                            str0 = str1;
+                        }
+                        else
+                            i = -1;//??
+                        cifteteli = true;
+                        if (i == -1)
+                            return false;
+                        return snappy();
+                    }
+                    bool snappy()
+                    {
+                        while (cifteteli && i != -1 && i < lin.Length)
+                        {
+                            if (cifteteli)
+                            {
+                                i = lin.IndexOf(str0, i + 1);
+                                if (i == -1)
+                                    return false;
+                                if (lin[i - 1].ToString() != @"\" && (i < lin.Length - 1 && lin[i + 1].ToString() != str0))
+                                    cifteteli = false;
+                                //   Console.WriteLine(ay + "  cifteteli");
+                            }
+                            else
+                                break;
+                        }
+                        return true;
+                    }
+                    return vx();
+                    bool vx()
+                    {
+                        if (!tt())
+                            return false;
+                        while (i != -1 && i < lin.Length)
+                        {
+                            char cf = lin[i - 1];
+                            if (cf == '+' || cf == ',')    //bbbb= "fffff" + 'aaaaa'+"#}"  #
+                            {                     //yapışık string ++++
+                                i++;
+                                Console.WriteLine(ay + " | " + cf + "   |  str" + str0 + "    hedef bulundu");
+                                if (i < lin.Length)
+                                {
+                                    aa();
+                                    if (str1i == -1 && str2i == -1)
+                                    {
+                                        if (lin.IndexOf(ara, i) != -1)
+                                        {
+                                            Console.WriteLine(ay + " + " +
+                                            str0 + "   if (lin.IndexOf(ara, i) != -1)   hedef bulundu");
+                                            return true;
+                                        }
+                                        else
+                                            return false;
+                                    }
+                                    if (!tt())
+                                        return false;
+                                }
+                                else
+                                    return false;
+                            }
+                            else
+                            {
+                                if (aru < i)//harika mucize 
+                                {
+                                    aru = lin.IndexOf(ara, i);
+                                    if (aru == -1)
+                                        return false;
+                                }
+                                if (ara[0] == lin[i])
+                                {
+                                    if (x(ara))
+                                        return true;
+                                    bool x(string s1)
+                                    {
+                                        for (int j = 1; j < s1.Length; j++)
+                                        {
+                                            //   Console.WriteLine(ay + " + " + str + "  for (int j = 1; j < s1.Length; j++)   hedef bulundu");
+                                            if (i + j > lin.Length - 1 || lin[i + j] != s1[j])
+                                                return false;
+                                        }
+                                        return true;
+                                    }
+                                }
+
+                            }
+                            if (i != -1)
+                                i++;
+                        }
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }
