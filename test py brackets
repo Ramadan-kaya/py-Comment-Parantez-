@@ -9,7 +9,7 @@
             string str0 = "";
             string lin = "";
             string space = "";
-            string liste = ""; 
+            string liste = "";
             string ara = "";
             int aru = 0;
             int i = 0;
@@ -167,7 +167,7 @@
                                 Console.WriteLine(ay + " Else ");
                             }
                         }
-                        liste += ay + "\t" + space + lin + "\n";
+                        liste += /*ay + "\t" +*/ space + lin + "\n";
                         space = spax;
                         //   başında yada  ((En sonunda) x2 )  bulunan ilk işaret    x2 nedir? kimse bilmiyor belki ama zaten önemli değil 
                     }
@@ -298,6 +298,61 @@
                         return false;
                     }
                 }
+                else
+                    return true;
+                 
                 return false;
             }
         }
+
+
+        string test_py = @"
+#Test .py File This is a .py file that I used in the project instance.
+import sys
+import subprocess
+def xxxxxxxxxxxxxx(code):   #{ 2
+ code = code.replace(""\r"", """")          # CRLF fix
+ code = code.lstrip(""\ufeff"")           # BOM fix
+ indent = 0
+ output = []
+ last_line_index = -1
+ for raw_line in code.split(""\n""):
+  #{3 Armut
+  raw_line = raw_line.replace(""\t"", ""    "")  # TAB fix
+  stripped = raw_line.strip()
+  if stripped == ""55"":#Alma #{4
+   if last_line_index >= 0: #{
+    output[last_line_index] += "":""
+    indent += 1
+    continue
+   #}
+  #}#Hayver 44
+  if stripped == ""66"":  #{5
+   indent -= 1
+   continue #}55
+  line = ("" "" * indent) + stripped
+  output.append(line)
+  last_line_index = len(output) - 1
+ #}33
+ return ""\n"".join(output)
+#}22
+#@{
+if __name__ == ""__main__"":
+    filename = sys.argv[1]
+
+    with open(filename, ""r"", encoding=""utf-8"") as f:
+        code = f.read()
+
+    pycode = xxxxxxxxxxxxxx(code)
+
+    with open(""out.py"", ""w"", encoding=""utf-8"") as f:
+        f.write(pycode)
+
+    print(""Derlendi → out.py"")
+    print(""Çalıştırılıyor...\n"")
+
+    subprocess.run([""python"", ""out.py""])
+#@} 
+";
+
+
